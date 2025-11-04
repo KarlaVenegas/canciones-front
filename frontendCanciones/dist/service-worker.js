@@ -1,4 +1,3 @@
-// Service Worker ajustado: no asume iconos presentes
 const CACHE_NAME = 'cancionesfavo-shell-v1';
 const API_CACHE = 'cancionesfavo-api-v1';
 
@@ -87,7 +86,6 @@ self.addEventListener('fetch', event => {
             }
             return networkResponse;
         }).catch(() => {
-            // si falla y era una imagen, no hay icon fallback -> simplemente indefinido
             if (req.destination === 'image') {
                 return new Response(null, { status: 404 });
             }

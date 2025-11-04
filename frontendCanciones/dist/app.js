@@ -1,10 +1,3 @@
-// FRONTEND - app.js (actualizado para incluir fechaNacimiento/genero en Artista
-// y album/ano/genero en Cancion; preparado para microservicios separados)
-//
-// Configura las URLs según donde corran tus microservicios.
-// Por defecto asumo:
-// - artists-service en http://localhost:8080
-// - songs-service  in http://localhost:8081
 const API_ARTISTS = (window.API_ARTISTS_URL) ? window.API_ARTISTS_URL : 'http://localhost:8080/api/artists';
 const API_SONGS = (window.API_SONGS_URL) ? window.API_SONGS_URL : 'http://localhost:8081/api/songs';
 
@@ -41,7 +34,7 @@ function backoffDelay(retries) {
     return Math.min(30000, base * Math.pow(2, retries));
 }
 
-// UI helpers
+
 function addPendingArtistToUI(pending) {
     const container = document.getElementById('artistasList');
     if (!container) return;
@@ -193,16 +186,13 @@ function renderCanciones(canciones) {
 
 async function load() {
     updateConnectionBadge();
-    // mostrar pendientes guardados en UI
     const pending = await getPendingQueue();
     pending.forEach(p => addPendingArtistToUI(p));
-    // obtener artistas y canciones del server / cache
     const [artistas, canciones] = await Promise.all([fetchArtistas(), fetchCanciones()]);
     renderArtistas(artistas);
     renderCanciones(canciones);
 }
 
-// Envío de artista: si online intenta enviar; si falla o está offline encola
 document.addEventListener('DOMContentLoaded', () => {
     const formArt = document.getElementById('formArtista');
     if (formArt) {
@@ -235,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // offline o error -> encolar
+            // offline o error
             const pending = await enqueuePendingArtist(payload);
             addPendingArtistToUI(pending);
             formArt.reset();
@@ -259,7 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!titulo || !artistaId) return alert('Título y artista obligatorios');
 
-            // songs-service espera artistaId (no objeto)
             const payload = { titulo, album, ano, genero: generoCancion, artistaId: Number(artistaId) };
 
             try {
@@ -285,13 +274,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // cargar inicialmente datos y procesar cola si estamos online
+
     load().then(() => {
         if (navigator.onLine) processPendingQueue();
     });
 });
 
-// Procesar cola de artistas pendientes
 async function processPendingQueue() {
     const queue = await getPendingQueue();
     if (!queue.length) return;
