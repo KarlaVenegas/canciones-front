@@ -1,0 +1,4 @@
+body { background: #f7f9fc; }
+.list-group-item ul { margin-top: 8px; padding-left: 16px; }
+.pending { opacity: 0.95; border-left: 4px solid #ffc107; }
+.badge { margin-left: 8px; }

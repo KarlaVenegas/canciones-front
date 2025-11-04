@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CancionesFavo</title>
+
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#1976d2" />
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- localForage para la cola offline -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+
+    <script src="sw-register.js" defer></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-primary mb-3">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Canciones Favoritas</span>
+        <span id="connStatus" class="badge bg-success">Online</span>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="row">
+        <!-- ARTISTAS -->
+        <div class="col-md-6">
+            <h5>Añadir artista</h5>
+            <!-- Campos solicitados: nombre, nacionalidad, fechaNacimiento, genero -->
+            <form id="formArtista" class="row g-2 mb-4">
+                <div class="col-12">
+                    <input id="nombre" class="form-control" placeholder="Nombre" required>
+                </div>
+                <div class="col-6">
+                    <input id="nacionalidad" class="form-control" placeholder="Nacionalidad">
+                </div>
+                <div class="col-3">
+                    <input id="fechaNacimiento" type="date" class="form-control" placeholder="Fecha de nacimiento">
+                </div>
+                <div class="col-3">
+                    <input id="generoArtista" class="form-control" placeholder="Género (ej. Rock)">
+                </div>
+                <div class="col-12 mt-2">
+                    <button class="btn btn-success" type="submit">Añadir artista</button>
+                </div>
+            </form>
+
+            <small class="text-muted"><strong>Nota:</strong> Puedes añadir artistas mientras estés offline; las canciones requieren conexión.</small>
+
+            <hr>
+
+            <h4>Artistas</h4>
+            <div id="artistasList" class="list-group mb-3"></div>
+        </div>
+
+        <!-- CANCIONES -->
+        <div class="col-md-6">
+            <h5>Añadir canción</h5>
+            <!-- Campos solicitados: titulo, album, año, genero, artista relacionado -->
+            <form id="formCancion" class="row g-2 mb-3">
+                <div class="col-12">
+                    <input id="titulo" class="form-control" placeholder="Título" required>
+                </div>
+                <div class="col-6">
+                    <input id="album" class="form-control" placeholder="Álbum">
+                </div>
+                <div class="col-3">
+                    <input id="ano" type="number" min="1900" max="2100" class="form-control" placeholder="Año">
+                </div>
+                <div class="col-3">
+                    <input id="generoCancion" class="form-control" placeholder="Género">
+                </div>
+
+                <div class="col-12 mt-2">
+                    <label for="artistaSelect" class="form-label">Artista</label>
+                    <select id="artistaSelect" class="form-select" required>
+                        <option value="">Selecciona artista</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-2">
+                    <button class="btn btn-primary" type="submit">Añadir canción</button>
+                </div>
+            </form>
+
+            <hr>
+
+            <h4>Canciones</h4>
+            <div id="cancionesList" class="list-group mb-3"></div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
